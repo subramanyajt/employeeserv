@@ -2,6 +2,7 @@ package com.paypal.bfs.test.employeeserv.impl;
 
 import com.paypal.bfs.test.employeeserv.api.EmployeeResource;
 import com.paypal.bfs.test.employeeserv.api.model.Employee;
+import com.paypal.bfs.test.employeeserv.exception.EmployeeException;
 import com.paypal.bfs.test.employeeserv.findings.Errors;
 import com.paypal.bfs.test.employeeserv.model.EmployeeTable;
 import com.paypal.bfs.test.employeeserv.service.EmployeeService;
@@ -32,18 +33,19 @@ public class EmployeeResourceImpl implements EmployeeResource {
     }
 
     @Override
-    public ResponseEntity<Employee> employeeGetById(String id) {
-
+    public ResponseEntity employeeGetById(String id) {
+    	String message = String.format("Employee with ID %s don't exist ", id);
         Optional<Employee> employee = employeeService.byId(id);
         return employee.isPresent() ? new ResponseEntity<>(employee.get(),HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
 
     }
 
     @Override
     public ResponseEntity createEmployee(Employee employeeRequest) {
 
-
+    	String message = "";
+    	
         if(null != employeeRequest.getId() ){
             Optional<Employee> employee = employeeService.byId(employeeRequest.getId()+"");
             if(employee.isPresent()){
@@ -55,9 +57,18 @@ public class EmployeeResourceImpl implements EmployeeResource {
         if(error.isPresent()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
+        
+        boolean state = false;
+        
+        try {
+        	state = employeeService.create(employeeRequest);
+        	message = "Employee Created successfully";
+        }catch(EmployeeException ex) {
+        	message = ex.getMessage();
+        }
 
-        return employeeService.create(employeeRequest) ? new ResponseEntity<>(HttpStatus.CREATED) :
-                new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+        return  state ? new ResponseEntity<>(message,HttpStatus.CREATED) :
+                new ResponseEntity<>(message, HttpStatus.EXPECTATION_FAILED);
 
     }
 

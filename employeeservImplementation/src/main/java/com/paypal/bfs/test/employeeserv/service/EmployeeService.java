@@ -2,6 +2,7 @@ package com.paypal.bfs.test.employeeserv.service;
 
 import com.paypal.bfs.test.employeeserv.api.model.Employee;
 import com.paypal.bfs.test.employeeserv.dao.EmployeeRepository;
+import com.paypal.bfs.test.employeeserv.exception.EmployeeException;
 import com.paypal.bfs.test.employeeserv.mapper.EmployeeMapper;
 import com.paypal.bfs.test.employeeserv.model.EmployeeTable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class EmployeeService {
         return Optional.empty();
     }
 
-    public boolean create(Employee employeeRequest){
+    public boolean create(Employee employeeRequest) throws EmployeeException{
         EmployeeTable employeeTable = null;
         try{
             employeeTable = employeeRepository.save(employeeMapper.forDB(employeeRequest));
@@ -57,6 +58,7 @@ public class EmployeeService {
             }
         }catch(Exception e){
             System.out.println("Error in table creating...");
+            throw new EmployeeException("Cannot create the employee");
         }
 
         return false;
