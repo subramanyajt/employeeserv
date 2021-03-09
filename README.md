@@ -35,3 +35,19 @@ We would like you to enhance the existing project and see you complete the follo
 
 ## Assignment submission
 Thank you very much for your time to take this test. Please upload this complete solution in Github and send us the link to `bfs-sor-interview@paypal.com`.
+
+## API
+GET http://localhost:8080/v1/bfs/employees/1
+
+POST http://localhost:8080/v1/bfs/employee
+{
+  "id": 2,
+  "first_name": "kiran",
+  "last_name": "shetty",
+  "date_of_birth": "01-07-2000",
+  "address_line1": "cvramannagar",
+  "city": "bangalore",
+  "state": "karnataka",
+  "country": "India",
+  "zip_code": "560001"
+}
