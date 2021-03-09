@@ -36,9 +36,8 @@ public class EmployeeResourceImpl implements EmployeeResource {
     public ResponseEntity employeeGetById(String id) {
     	String message = String.format("Employee with ID %s don't exist ", id);
         Optional<Employee> employee = employeeService.byId(id);
-        return employee.isPresent() ? new ResponseEntity<>(employee.get(),HttpStatus.OK)
-                : new ResponseEntity<>(message,HttpStatus.NOT_FOUND);
-
+        return employee.isPresent() ? ResponseEntity.status(HttpStatus.OK).body(employee.get())
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
     @Override
