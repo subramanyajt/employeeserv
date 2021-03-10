@@ -51,3 +51,6 @@ POST http://localhost:8080/v1/bfs/employee
   "country": "India",
   "zip_code": "560001"
 }
+
+## Junit Test
+com.paypal.bfs.employeeserv.functional.test.EmployeeResourceTest run as junit test from eclipse (junit 4)
