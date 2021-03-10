@@ -62,7 +62,10 @@ public class EmployeeResourceImpl implements EmployeeResource {
         
         try {
         	state = employeeService.createEmployee(employeeRequest);
-        	message = "Employee Created successfully";
+            if(state)
+        	    message = "Employee Created successfully";
+            else
+                message = "Employee Not Created";
         }catch(EmployeeException ex) {
         	message = ex.getMessage();
         }
