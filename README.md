@@ -41,7 +41,7 @@ GET http://localhost:8080/v1/bfs/employees/1
 
 POST http://localhost:8080/v1/bfs/employee
 {
-  "id": 2,
+  "id": 1,
   "first_name": "kiran",
   "last_name": "shetty",
   "date_of_birth": "01-07-2000",
