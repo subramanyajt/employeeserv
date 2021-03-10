@@ -64,8 +64,7 @@ public class InputValidator {
     }
 
     private void checkForRequired(Employee employeeRequest, List<Errors> errorsList) {
-        //last name
-        //first name
+
         if(isEmpty(employeeRequest.getFirstName())){
             errorsList.add(Errors.builder().field(FIRST_NAME).message(REQUIRED).build());
         }

@@ -3,8 +3,9 @@ package com.paypal.bfs.test.employeeserv.service;
 import com.paypal.bfs.test.employeeserv.api.model.Employee;
 import com.paypal.bfs.test.employeeserv.dao.EmployeeRepository;
 import com.paypal.bfs.test.employeeserv.exception.EmployeeException;
-import com.paypal.bfs.test.employeeserv.mapper.EmployeeMapper;
 import com.paypal.bfs.test.employeeserv.model.EmployeeTable;
+import com.paypal.bfs.test.employeeserv.util.Util;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +20,14 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Autowired
-    private EmployeeMapper employeeMapper;
-
 
     private final Map<Integer, Employee> employeeMap = new ConcurrentHashMap<>();
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.employeeMapper = employeeMapper;
     }
 
-    public Optional<Employee> byId(String id){
+    public Optional<Employee> getById(String id){
 
         Employee employee = employeeMap.get(Integer.valueOf(id));
         if(Objects.nonNull(employee)){
@@ -39,7 +36,7 @@ public class EmployeeService {
 
         Optional<EmployeeTable> et = employeeRepository.findById(Integer.valueOf(id));
         if(et.isPresent()){
-            Employee e = employeeMapper.forAPI(et.get());
+            Employee e = Util.forAPI(et.get());
             if(Objects.nonNull(e)){
                 employeeMap.put(e.getId(),e);
                 return Optional.of(e);
@@ -49,10 +46,10 @@ public class EmployeeService {
         return Optional.empty();
     }
 
-    public boolean create(Employee employeeRequest) throws EmployeeException{
+    public boolean createEmployee(Employee employeeRequest) throws EmployeeException{
         EmployeeTable employeeTable = null;
         try{
-            employeeTable = employeeRepository.save(employeeMapper.forDB(employeeRequest));
+            employeeTable = employeeRepository.save(Util.forDB(employeeRequest));
             if(Objects.nonNull(employeeTable)){
                 return true;
             }

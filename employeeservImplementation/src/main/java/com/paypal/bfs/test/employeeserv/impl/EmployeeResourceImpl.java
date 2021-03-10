@@ -35,9 +35,10 @@ public class EmployeeResourceImpl implements EmployeeResource {
     @Override
     public ResponseEntity employeeGetById(String id) {
     	String message = String.format("Employee with ID %s don't exist ", id);
-        Optional<Employee> employee = employeeService.byId(id);
+        Optional<Employee> employee = employeeService.getById(id);
         return employee.isPresent() ? ResponseEntity.status(HttpStatus.OK).body(employee.get())
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+
     }
 
     @Override
@@ -46,7 +47,7 @@ public class EmployeeResourceImpl implements EmployeeResource {
     	String message = "";
     	
         if(null != employeeRequest.getId() ){
-            Optional<Employee> employee = employeeService.byId(employeeRequest.getId()+"");
+            Optional<Employee> employee = employeeService.getById(String.valueOf(employeeRequest.getId()));
             if(employee.isPresent()){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Employee Exists!");
             }
@@ -60,14 +61,14 @@ public class EmployeeResourceImpl implements EmployeeResource {
         boolean state = false;
         
         try {
-        	state = employeeService.create(employeeRequest);
+        	state = employeeService.createEmployee(employeeRequest);
         	message = "Employee Created successfully";
         }catch(EmployeeException ex) {
         	message = ex.getMessage();
         }
 
-        return  state ? new ResponseEntity<>(message,HttpStatus.CREATED) :
-                new ResponseEntity<>(message, HttpStatus.EXPECTATION_FAILED);
+        return  state ? ResponseEntity.status(HttpStatus.CREATED).body(message) :
+                ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 
     }
 
