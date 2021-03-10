@@ -26,7 +26,11 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
-
+    
+    /**
+    * Method to fetch employee details based on id first it will check in cache if found the return else fetch from DB cache it and return
+    * Caching is done to improve the performance
+    **/
     public Optional<Employee> getById(String id){
 
         Employee employee = employeeMap.get(Integer.valueOf(id));
@@ -46,6 +50,9 @@ public class EmployeeService {
         return Optional.empty();
     }
 
+    /**
+    * Method to save employee data into databse
+    **/
     public boolean createEmployee(Employee employeeRequest) throws EmployeeException{
         EmployeeTable employeeTable = null;
         try{
